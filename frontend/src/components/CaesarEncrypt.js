@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Encrypt() {
+function CaesarEncrypt() {
   const [text, setText] = useState('');
   const [shift, setShift] = useState(0);
   const [encryptedText, setEncryptedText] = useState('');
@@ -20,7 +20,7 @@ function Encrypt() {
   return (
     <div className="card">
       <div className="card-body">
-        <h2 className="card-title">Encrypt</h2>
+        <h2 className="card-title">CaesarEncrypt</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="text">Text to Encrypt:</label>
@@ -57,4 +57,4 @@ function Encrypt() {
   );
 }
 
-export default Encrypt;
+export default CaesarEncrypt;

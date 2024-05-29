@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Decrypt() {
+function CaesarDecrypt() {
   const [text, setText] = useState('');
   const [shift, setShift] = useState(0);
   const [decryptedText, setDecryptedText] = useState('');
@@ -20,7 +20,7 @@ function Decrypt() {
   return (
     <div className="card">
       <div className="card-body">
-        <h2 className="card-title">Decrypt</h2>
+        <h2 className="card-title">CaesarDecrypt</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="text">Text to Decrypt:</label>
@@ -57,4 +57,4 @@ function Decrypt() {
   );
 }
 
-export default Decrypt;
+export default CaesarDecrypt;
