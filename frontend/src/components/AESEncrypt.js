@@ -15,6 +15,7 @@ function AESEncrypt() {
     try {
       const response = await axios.post('http://localhost:4000/aes/encrypt', { text, key, salt, mode, keySize, iv });
       setEncryptedText(response.data.encryptedText);
+      setIV(response.data.iv); // Set the IV returned from the server
     } catch (error) {
       console.error('Error encrypting text', error);
     }
@@ -93,7 +94,6 @@ function AESEncrypt() {
               id="iv"
               value={iv}
               onChange={(e) => setIV(e.target.value)}
-              required
             />
           </div>
           <button type="submit" className="btn btn-primary">Encrypt</button>
@@ -102,6 +102,12 @@ function AESEncrypt() {
           <div className="mt-4">
             <h4>Encrypted Text:</h4>
             <p className="alert alert-success">{encryptedText}</p>
+          </div>
+        )}
+        {iv && (
+          <div className="mt-4">
+            <h4>IV:</h4>
+            <p className="alert alert-info">{iv}</p>
           </div>
         )}
       </div>

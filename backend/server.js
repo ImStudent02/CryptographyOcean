@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const crypto = require('crypto');
 
+
 // Initialize the Express app and define the port
 const app = express();
 const port = 4000;
@@ -30,13 +31,26 @@ function caesarCipherDecrypt(str, shift) {
     }).join('');
 }
 
-// Function to encrypt text using AES
-function aesEncrypt(text, key, salt, mode, keySize, iv) {
-    const cipher = crypto.createCipheriv(`aes-${keySize}-${mode}`, crypto.scryptSync(key, salt, keySize / 8), Buffer.from(iv, 'hex'));
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
+function aesEncrypt(text, key, salt, mode, keySize, iv = null) {
+    if (iv) {
+        if (iv.length !== 32) {
+            throw new Error('Invalid IV length. IV must be 16 bytes long (32 hex characters).');
+        }
+        iv = Buffer.from(iv, 'hex');
+    } else {
+        iv = crypto.randomBytes(16); // Generate a random 16-byte IV if not provided
+    }
+
+    const ivString = iv.toString('hex'); // Convert IV to a hexadecimal string
+    const keyBuffer = crypto.scryptSync(key, salt, keySize / 8); // Derive the key using scrypt
+    const cipher = crypto.createCipheriv(`aes-${keySize}-${mode}`, keyBuffer, iv); // Create the cipher
+
+    let encrypted = cipher.update(text, 'utf8', 'hex'); // Encrypt the text
+    encrypted += cipher.final('hex'); // Finalize the encryption
+
+    return [encrypted, ivString];
 }
+
 
 // Function to decrypt text using AES
 function aesDecrypt(text, key, salt, mode, keySize, iv) {
@@ -50,6 +64,21 @@ function aesDecrypt(text, key, salt, mode, keySize, iv) {
 function md5Hash(text) {
     return crypto.createHash('md5').update(text).digest('hex');
 }
+
+// API endpoint for AES encryption
+app.post('/aes/encrypt', (req, res) => {
+    const { text, key, salt, mode, keySize, iv } = req.body;
+    if (!text || !key || !salt || !mode || !keySize) {
+        return res.status(400).json({ error: 'Text, key, salt, mode, and key size are required' });
+    }
+
+    try {
+        const encrypted = aesEncrypt(text, key, salt, mode, keySize, iv);
+        res.json({ encryptedText: encrypted[0], iv: encrypted[1] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 // API endpoint for Caesar encryption
 app.post('/caesar/encrypt', (req, res) => {
