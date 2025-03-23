@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+/node_modules
+**/node_modules/
+
+# Build outputs
+/build
+**/build
+/dist
+**/dist
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Project specific ignores
+iNTERNSHIP PROJECT/
+iNTERNSHIP PROJECT.zip
+dev_user_manual_video.mp4
+CYBER SECURITY PROJECT REPORT.pdf
+CYBER SECURITY PROJECT REPORT.docx
+
+# Cache directories
+.cache/
+.next/
+.nuxt/
+.npm/
+
+# Coverage directories
+/coverage
+**/coverage 
